@@ -1,0 +1,22 @@
+services:
+  app:
+    image: oven/bun:1.2.13-alpine
+    user: bun
+    ports:
+      - "3000:3000"
+    networks:
+      - barcode_generator_network
+    restart: unless-stopped
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: bun run start
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "-q", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  barcode_generator_network:
+    external: true
