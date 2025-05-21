@@ -165,6 +165,7 @@ const totalItem = computed(() => data.value?.total || 0)
 
     <UTable
       ref="table"
+      v-model:pagination="pagination"
       :loading="status === 'pending'"
       :columns="columns"
       :data="dataItems"
