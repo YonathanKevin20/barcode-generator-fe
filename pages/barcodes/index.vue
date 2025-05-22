@@ -64,20 +64,25 @@ const actionItems = (row: Barcode): DropdownMenuItem[][] => {
       label: row.is_inactive ? 'Set Active' : 'Set Inactive',
       icon: row.is_inactive ? 'i-mdi-barcode-scan' : 'i-mdi-barcode-off',
       onSelect: () => updateBarcodeInactive(row.id)
-    }],
-    [{
+    }]
+  ]
+
+  const viewDelete: DropdownMenuItem[] = [
+    {
       label: 'View',
       icon: 'i-mdi-eye',
       onSelect: () => openModalViewBarcode(row.id)
-    }]
+    }
   ]
   if (isAdmin.value) {
-    items.push([{
+    viewDelete.push({
       label: 'Delete',
       icon: 'i-mdi-delete',
+      color: 'error',
       onSelect: () => openModalDeleteBarcode(row.id)
-    }])
+    })
   }
+  items.push(viewDelete)
   return items
 }
 

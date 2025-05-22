@@ -39,10 +39,11 @@ const actionItems = (row: Supplier): DropdownMenuItem[][] => [
     label: 'Edit',
     icon: 'i-mdi-pencil',
     onSelect: () => navigateTo(`/suppliers/${row.id}/edit`)
-  }],
-  [{
+  },
+  {
     label: 'Delete',
     icon: 'i-mdi-delete',
+    color: 'error',
     onSelect: () => openModalDeleteSupplier(row.id)
   }]
 ]

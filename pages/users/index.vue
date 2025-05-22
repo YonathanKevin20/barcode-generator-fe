@@ -42,10 +42,11 @@ const actionItems = (row: User): DropdownMenuItem[][] => [
     label: 'Edit',
     icon: 'i-mdi-pencil',
     onSelect: () => navigateTo(`/users/${row.id}/edit`)
-  }],
-  [{
+  },
+  {
     label: 'Delete',
     icon: 'i-mdi-delete',
+    color: 'error',
     disabled: isSelf(row.id),
     onSelect: () => openModalDeleteUser(row.id)
   }]
