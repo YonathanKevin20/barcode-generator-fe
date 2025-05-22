@@ -61,6 +61,11 @@ const columns: TableColumn<Barcode>[] = [
 const actionItems = (row: Barcode): DropdownMenuItem[][] => {
   const items: DropdownMenuItem[][] = [
     [{
+      label: row.is_inactive ? 'Set Active' : 'Set Inactive',
+      icon: row.is_inactive ? 'i-mdi-barcode-scan' : 'i-mdi-barcode-off',
+      onSelect: () => updateBarcodeInactive(row.id)
+    }],
+    [{
       label: 'View',
       icon: 'i-mdi-eye',
       onSelect: () => openModalViewBarcode(row.id)
@@ -74,6 +79,17 @@ const actionItems = (row: Barcode): DropdownMenuItem[][] => {
     }])
   }
   return items
+}
+
+const toast = useToast()
+
+const updateBarcodeInactive = async (id: number) => {
+  const { data } = await $fetchWithToken(`/api/barcodes/${id}/inactive`, {
+    method: 'PATCH'
+  })
+
+  toast.add({ title: data.message })
+  refresh()
 }
 
 const overlay = useOverlay()
@@ -176,7 +192,11 @@ const totalItem = computed(() => data.value?.total || 0)
       class="mb-8 rounded-lg border-2 border-default">
       <template #barcode-cell="{ row }">
         <span
-          class="hover:underline text-sky-500 dark:text-sky-400 cursor-pointer"
+          class="hover:underline cursor-pointer"
+          :class="{
+            'text-sky-500': !row.original.is_inactive,
+            'text-red-500': row.original.is_inactive,
+          }"
           @click="openModalViewBarcode(row.original.id)">{{ row.original.barcode }}</span>
       </template>
       <template #created_at-cell="{ row }">{{ dateFormatted(row.original.created_at) }}</template>

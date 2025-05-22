@@ -7,4 +7,5 @@ export interface Barcode {
   supplier_name: string
   product_name: string
   barcode: string
+  is_inactive: boolean
 }
