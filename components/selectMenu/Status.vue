@@ -27,5 +27,5 @@ const { data, status, refresh } = await useLazyAsyncData(
     :items="data"
     value-key="id"
     label-key="name"
-    class="w-40" />
+    class="w-32" />
 </template>
