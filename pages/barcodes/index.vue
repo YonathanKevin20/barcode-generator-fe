@@ -44,6 +44,10 @@ const columns: TableColumn<Barcode>[] = [
     header: 'CREATED AT',
   },
   {
+    accessorKey: 'created_by_user',
+    header: 'CREATED BY',
+  },
+  {
     accessorKey: 'actions',
     header: 'ACTIONS',
     meta: {
