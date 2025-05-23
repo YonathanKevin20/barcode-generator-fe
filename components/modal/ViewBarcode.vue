@@ -13,7 +13,8 @@ const state = reactive({
   supplier_name: '',
   product_name: '',
   barcode: '',
-  created_at: ''
+  created_at: '',
+  created_by_user: ''
 })
 
 const initState = async () => {
@@ -27,6 +28,7 @@ const initState = async () => {
       state.product_name = data.product_name
       state.barcode = data.barcode
       state.created_at = data.created_at
+      state.created_by_user = data.created_by_user
     }
   } catch (error: any) {
     console.error(error)
@@ -51,6 +53,16 @@ const drawBarcode = async () => {
   }
 }
 
+const copied = ref(false)
+const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text)
+  copied.value = true
+
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
+}
+
 onMounted(async () => {
   await initState()
   await drawBarcode()
@@ -67,10 +79,27 @@ onMounted(async () => {
         <UInput :model-value="state.category_name" class="max-w-lg" readonly />
         <UInput :model-value="state.supplier_name" class="max-w-lg" readonly />
         <UInput :model-value="state.product_name" class="max-w-lg" readonly />
-        <div class="flex space-x-4">
-          <UInput :model-value="state.barcode" class="w-1/2 max-w-lg" readonly />
+        <div class="space-x-4 flex items-center">
           <UInput :model-value="dateFormatted(state.created_at)" class="w-1/2 max-w-lg" readonly />
+          <UInput :model-value="state.created_by_user" class="w-1/2 max-w-lg" readonly />
         </div>
+        <UInput
+          :model-value="state.barcode"
+          class="max-w-lg"
+          readonly
+          :ui="{ trailing: 'pe-1' }">
+          <template v-if="state.barcode?.length" #trailing>
+            <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
+              <UButton
+                :color="copied ? 'success' : 'neutral'"
+                variant="link"
+                size="sm"
+                :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+                aria-label="Copy to clipboard"
+                @click="copyToClipboard(state.barcode)" />
+            </UTooltip>
+          </template>
+        </UInput>
         <canvas id="barcode" class="mx-auto bg-neutral-200 dark:bg-neutral-800 rounded-lg p-2"></canvas>
       </div>
     </template>

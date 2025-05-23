@@ -144,10 +144,18 @@ watch(() => pagination.value.pageSize, () => {
 
 const search = reactive({
   status_id: 0,
+  category_name: '',
+  supplier_name: '',
+  product_name: '',
   barcode: '',
 })
 watch(search, () => {
   table.value?.tableApi?.resetPagination()
+})
+watch(() => search.product_name, (val) => {
+  if (val !== val.toUpperCase()) {
+    search.product_name = val.toUpperCase()
+  }
 })
 
 const { data, status, refresh } = await useLazyAsyncData('barcodes', () => $fetchWithToken<PaginatedResponse<Barcode>>(`/api/barcodes`, {
@@ -155,6 +163,9 @@ const { data, status, refresh } = await useLazyAsyncData('barcodes', () => $fetc
     page: pagination.value.pageIndex + 1,
     limit: pagination.value.pageSize,
     status_id: search.status_id,
+    category_name: search.category_name,
+    supplier_name: search.supplier_name,
+    product_name: search.product_name,
     barcode: search.barcode
   }
 }), {
@@ -196,16 +207,33 @@ const selectedIds = computed(() => {
         color="primary" />
     </div>
 
-    <div class="overflow-x-auto border-t border-default py-4 grid grid-cols-3">
-      <div class="flex items-center gap-4 col-span-2">
+    <div class="overflow-x-auto border-t border-default py-4 grid grid-cols-3 gap-4">
+      <div class="flex items-center gap-4 col-span-3">
         <SelectMenuStatus v-model="search.status_id" :showAll="true" />
+        <UInput
+          v-model="search.category_name"
+          placeholder="Search by category..."
+          icon="i-mdi-magnify"
+          class="w-full md:w-64" />
+        <UInput
+          v-model="search.supplier_name"
+          placeholder="Search by supplier..."
+          icon="i-mdi-magnify"
+          class="w-full md:w-64" />
+        <UInput
+          v-model="search.product_name"
+          placeholder="Search by product..."
+          icon="i-mdi-magnify"
+          class="w-full md:w-64" />
         <UInput
           v-model="search.barcode"
           placeholder="Search by barcode..."
           icon="i-mdi-barcode"
           class="w-full md:w-48" />
-        <span>{{ selectedIds.length }} of {{ totalItem }} items selected</span>
+      </div>
+      <div class="flex items-center gap-4 col-span-2">
         <SelectPaginationPage v-model="pagination.pageSize" />
+        <span>{{ selectedIds.length }} of {{ totalItem }} items selected</span>
       </div>
       <UPagination
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
