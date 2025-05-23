@@ -136,7 +136,7 @@ const openModalViewBarcode = (id: number) => {
 
 const pagination = ref({
   pageIndex: 0,
-  pageSize: 10
+  pageSize: 20
 })
 watch(() => pagination.value.pageSize, () => {
   refresh()
