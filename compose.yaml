@@ -1,6 +1,7 @@
 services:
   app:
     image: oven/bun:1.2.13-alpine
+    user: "${MY_UID}:${MY_GID}"
     ports:
       - "3000:3000"
     networks:

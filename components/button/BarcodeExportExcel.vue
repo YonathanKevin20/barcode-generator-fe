@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import xlsx from 'node-xlsx'
-import type { WorkSheetOptions } from 'node-xlsx'
+import ExcelJS from 'exceljs'
 import type { Barcode } from '~/types/barcode'
 
 const props = defineProps<{
@@ -60,24 +59,39 @@ const exportExcel = async () => {
     ['#', 'STATUS', 'CATEGORY', 'SUPPLIER', 'PRODUCT', 'BARCODE', 'CREATED AT', 'CREATED BY'],
     ...convertedArray
   ]
-  const sheetOptions: WorkSheetOptions = {
-    '!cols': [
-      { wch: 5 },
-      { wch: 10 },
-      { wch: 40 },
-      { wch: 40 },
-      { wch: 40 },
-      { wch: 20 },
-      { wch: 20 },
-      { wch: 20 }
-    ]
-  }
-  const buffer = xlsx.build([{
-    name: 'Sheet1',
-    data: rows,
-    options: sheetOptions
-  }])
 
+  // Create workbook and worksheet
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet('Sheet1')
+
+  // Add rows
+  worksheet.addRows(rows)
+
+  // Set column widths and types
+  worksheet.columns = [
+    { width: 5 },
+    { width: 10 },
+    { width: 40 },
+    { width: 40 },
+    { width: 40 },
+    { width: 20, style: { numFmt: '@' } }, // BARCODE column as text
+    { width: 20 },
+    { width: 20 }
+  ]
+
+  // Make header row bold
+  worksheet.getRow(1).font = { bold: true }
+
+  // Set BARCODE column cells to text explicitly (except header)
+  worksheet.getColumn(6).eachCell((cell, rowNumber) => {
+    if (rowNumber > 1) {
+      cell.numFmt = '@'
+      cell.value = cell.value ? ''+cell.value : ''
+    }
+  })
+
+  // Generate buffer and download
+  const buffer = await workbook.xlsx.writeBuffer()
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')

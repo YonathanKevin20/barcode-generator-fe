@@ -2,7 +2,7 @@
   "name": "barcode-generator-fe",
   "private": true,
   "type": "module",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
     "build": "bunx --bun nuxt build",
     "dev": "bunx --bun nuxt dev",
@@ -17,8 +17,8 @@
     "@nuxt/ui": "^3.1.2",
     "dayjs": "^1.11.13",
     "dayjs-nuxt": "^2.1.11",
+    "exceljs": "^4.4.0",
     "jsbarcode": "^3.11.6",
-    "node-xlsx": "^0.24.0",
     "nuxt": "3.17.4",
     "ufo": "^1.6.1",
     "v3-infinite-loading": "^1.3.2",
