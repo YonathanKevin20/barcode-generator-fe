@@ -41,6 +41,16 @@ const columns: TableColumn<Barcode>[] = [
           })
   },
   {
+    accessorKey: 'actions',
+    header: 'ACTIONS',
+    meta: {
+      class: {
+        th: 'text-center',
+        td: 'text-center'
+      }
+    }
+  },
+  {
     accessorKey: 'status_name',
     header: 'STATUS',
   },
@@ -67,16 +77,6 @@ const columns: TableColumn<Barcode>[] = [
   {
     accessorKey: 'created_by_user',
     header: 'CREATED BY',
-  },
-  {
-    accessorKey: 'actions',
-    header: 'ACTIONS',
-    meta: {
-      class: {
-        th: 'text-center',
-        td: 'text-center'
-      }
-    }
   }
 ]
 const actionItems = (row: Barcode): DropdownMenuItem[][] => {
@@ -252,6 +252,11 @@ const selectedIds = computed(() => {
       :data="dataItems"
       :get-row-id="row => row.is_inactive ? row.id + '-inactive' : ''+row.id"
       class="rounded-lg border-2 border-default">
+      <template #actions-cell="{ row }">
+        <UDropdownMenu :items="actionItems(row.original)">
+          <UButton color="neutral" variant="ghost" icon="i-mdi-dots-vertical" aria-label="Actions" />
+        </UDropdownMenu>
+      </template>
       <template #barcode-cell="{ row }">
         <span
           class="hover:underline cursor-pointer"
@@ -262,11 +267,6 @@ const selectedIds = computed(() => {
           @click="openModalViewBarcode(row.original.id)">{{ row.original.barcode }}</span>
       </template>
       <template #created_at-cell="{ row }">{{ dateFormatted(row.original.created_at) }}</template>
-      <template #actions-cell="{ row }">
-        <UDropdownMenu :items="actionItems(row.original)">
-          <UButton color="neutral" variant="ghost" icon="i-mdi-dots-vertical" aria-label="Actions" />
-        </UDropdownMenu>
-      </template>
     </UTable>
   </main>
 </template>
