@@ -110,11 +110,13 @@ const totalItem = computed(() => data.value?.total || 0)
     <div class="overflow-x-auto border-t border-default py-4 grid grid-cols-3">
       <div class="flex items-center gap-4 col-span-2">
         <UInput
+          name="code"
           v-model="search.code"
           placeholder="Search by code..."
           icon="i-mdi-barcode"
           class="w-full md:w-48" />
         <UInput
+          name="name"
           v-model="search.name"
           placeholder="Search by name..."
           icon="i-mdi-magnify"

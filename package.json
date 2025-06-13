@@ -12,23 +12,23 @@
     "start": "bun run --bun ./.output/server/index.mjs"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.44",
+    "@iconify-json/lucide": "^1.2.48",
     "@iconify-json/mdi": "^1.2.3",
-    "@nuxt/ui": "^3.1.2",
+    "@nuxt/ui": "^3.1.3",
     "dayjs": "^1.11.13",
     "dayjs-nuxt": "^2.1.11",
     "exceljs": "^4.4.0",
-    "jsbarcode": "^3.11.6",
-    "nuxt": "3.17.4",
+    "jsbarcode": "^3.12.1",
+    "nuxt": "3.17.5",
     "ufo": "^1.6.1",
     "v3-infinite-loading": "^1.3.2",
     "vue": "latest",
     "vue-router": "latest",
-    "zod": "^3.25.28"
+    "zod": "^3.25.64"
   },
   "devDependencies": {
     "@sidebase/nuxt-auth": "^0.10.1",
-    "tailwindcss": "^4.1.7",
+    "tailwindcss": "^4.1.10",
     "vue-tsc": "2.2.10"
   },
   "pnpm": {

@@ -211,21 +211,25 @@ const selectedIds = computed(() => {
       <div class="flex items-center gap-4 col-span-3">
         <SelectMenuStatus v-model="search.status_id" :showAll="true" />
         <UInput
+          name="category_name"
           v-model="search.category_name"
           placeholder="Search by category..."
           icon="i-mdi-magnify"
           class="w-full md:w-64" />
         <UInput
+          name="supplier_name"
           v-model="search.supplier_name"
           placeholder="Search by supplier..."
           icon="i-mdi-magnify"
           class="w-full md:w-64" />
         <UInput
+          name="product_name"
           v-model="search.product_name"
           placeholder="Search by product..."
           icon="i-mdi-magnify"
           class="w-full md:w-64" />
         <UInput
+          name="barcode"
           v-model="search.barcode"
           placeholder="Search by barcode..."
           icon="i-mdi-barcode"

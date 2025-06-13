@@ -115,6 +115,7 @@ const totalItem = computed(() => data.value?.total || 0)
       <div class="flex items-center gap-4 col-span-2">
         <SelectMenuRole v-model="search.role" :showAll="true" />
         <UInput
+          name="username"
           v-model="search.username"
           placeholder="Search by username..."
           icon="i-mdi-magnify"
