@@ -12,7 +12,6 @@ definePageMeta({
 })
 
 const $fetchWithToken = fetchWithToken()
-const table = useTemplateRef('table')
 
 const columns: TableColumn<Category>[] = [
   {
@@ -61,7 +60,12 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 20
 })
+
 watch(() => pagination.value.pageSize, () => {
+  pagination.value.pageIndex = 0
+  refresh()
+})
+watch(() => pagination.value.pageIndex, () => {
   refresh()
 })
 
@@ -70,7 +74,8 @@ const search = reactive({
   name: ''
 })
 watch(search, () => {
-  table.value?.tableApi?.resetPagination()
+  pagination.value.pageIndex = 0
+  refresh()
 })
 
 const { data, status, refresh } = await useLazyAsyncData('categories', () => $fetchWithToken<PaginatedResponse<Category>>(`/api/categories`, {
@@ -87,8 +92,7 @@ const { data, status, refresh } = await useLazyAsyncData('categories', () => $fe
     page: 1,
     total: 0,
     total_page: 0
-  }),
-  watch: [pagination, search]
+  })
 })
 
 const dataItems = computed(() => data.value?.data || [])
@@ -107,8 +111,8 @@ const totalItem = computed(() => data.value?.total || 0)
         color="info" />
     </div>
 
-    <div class="overflow-x-auto border-t border-default py-4 grid grid-cols-3">
-      <div class="flex items-center gap-4 col-span-2">
+    <div class="overflow-x-auto border-t border-default py-4 grid grid-cols-3 gap-4">
+      <div class="flex items-center gap-4 col-span-3">
         <UInput
           name="code"
           v-model="search.code"
@@ -121,20 +125,22 @@ const totalItem = computed(() => data.value?.total || 0)
           placeholder="Search by name..."
           icon="i-mdi-magnify"
           class="w-full md:w-64" />
-        <span>{{ totalItem }} items</span>
+      </div>
+      <div class="flex items-center gap-4 col-span-2">
         <SelectPaginationPage v-model="pagination.pageSize" />
+        <span>{{ totalItem }} items</span>
       </div>
       <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
+        :page="pagination.pageIndex + 1"
+        :items-per-page="pagination.pageSize"
         :total="totalItem"
-        @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+        @update:page="(p: number) => pagination.pageIndex = p - 1"
         class="flex items-center justify-end col-span-1" />
     </div>
 
     <UTable
-      ref="table"
       v-model:pagination="pagination"
+      :pagination-options="{ manualPagination: true, rowCount: totalItem, autoResetPageIndex: false }"
       :loading="status === 'pending'"
       :columns="columns"
       :data="dataItems"

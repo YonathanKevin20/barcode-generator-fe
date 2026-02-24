@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import InfiniteLoading from 'v3-infinite-loading'
-import type { Supplier } from '~/types/supplier'
+import type { Barcode } from '~/types/barcode'
 
 const $fetchWithToken = fetchWithToken()
 const dropdownManager = useDropdownManager()
-const dropdownId = 'supplier-dropdown-' + Math.random().toString(36).substring(2, 9)
+const dropdownId = 'barcode-dropdown-' + Math.random().toString(36).substring(2, 9)
 
 const model = defineModel<number>()
-const suppliers = ref<Supplier[]>([])
+const barcodes = ref<Barcode[]>([])
 const page = ref(1)
 const noMore = ref(false)
 const searchName = ref('')
@@ -27,10 +27,10 @@ watch(() => dropdownManager.activeDropdown.value, (activeId) => {
   }
 })
 
-// Compute the selected supplier name
-const selectedSupplier = computed(() => {
+// Compute the selected barcode name
+const selectedBarcode = computed(() => {
   if (!model.value) return null
-  return suppliers.value.find(item => item.id === model.value)
+  return barcodes.value.find(item => item.id === model.value)
 })
 
 // Display text in input
@@ -38,7 +38,7 @@ const displayText = computed(() => {
   if (isFocused.value) {
     return searchName.value
   }
-  return selectedSupplier.value ? selectedSupplier.value.name + ' [' + selectedSupplier.value.code + ']' : ''
+  return selectedBarcode.value ? selectedBarcode.value.product_name + ' [' + selectedBarcode.value.barcode + ']' : ''
 })
 
 // Handle infinite loading
@@ -49,16 +49,17 @@ const infiniteHandler = async ($state: any) => {
   }
 
   try {
-    const { data } = await $fetchWithToken(`/api/suppliers`, {
+    const { data } = await $fetchWithToken(`/api/barcodes`, {
       params: {
         page: page.value,
-        name: searchName.value
+        search: searchName.value,
+        active: true
       }
     })
     const newItems = data
 
     if (newItems.length) {
-      suppliers.value.push(...newItems)
+      barcodes.value.push(...newItems)
       page.value += 1
       $state.loaded()
     } else {
@@ -66,13 +67,13 @@ const infiniteHandler = async ($state: any) => {
       $state.complete()
     }
   } catch (error) {
-    console.error('Error loading suppliers:', error)
+    console.error('Error loading barcodes:', error)
     $state.error()
   }
 }
 
 const reloadState = () => {
-  suppliers.value = []
+  barcodes.value = []
   page.value = 1
   noMore.value = false
 }
@@ -91,7 +92,7 @@ const onInputBlur = () => {
   // Small timeout to allow click events to register first
   setTimeout(() => {
     isFocused.value = false
-    if (!selectedSupplier.value) {
+    if (!selectedBarcode.value) {
       searchName.value = ''
     }
   }, 150)
@@ -107,7 +108,7 @@ const handleSearch = (event: Event) => {
 }
 
 // Handle item selection
-const selectItem = (item: Supplier) => {
+const selectItem = (item: Barcode) => {
   model.value = item.id
   isFocused.value = false
   isDropdownOpen.value = false
@@ -130,7 +131,7 @@ const toggleDropdown = () => {
 
 // Close dropdown on outside click
 const closeDropdown = (event: Event) => {
-  if (!(event.target as Element).closest('.supplier-select')) {
+  if (!(event.target as Element).closest('.barcode-select')) {
     isDropdownOpen.value = false
     isFocused.value = false
     dropdownManager.clearActive(dropdownId)
@@ -144,7 +145,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
     isFocused.value = false
     dropdownManager.clearActive(dropdownId)
     // Explicitly blur the input element to ensure consistent behavior
-    const input = document.querySelector('.supplier-select input')
+    const input = document.querySelector('.barcode-select input')
     if (input instanceof HTMLElement) {
       input.blur()
     }
@@ -171,12 +172,12 @@ const clearSelection = (e: Event) => {
 </script>
 
 <template>
-  <div class="supplier-select relative w-full" @click.stop>
+  <div class="barcode-select relative w-full" @click.stop>
     <!-- Search input -->
     <div class="relative">
       <input
         :value="displayText"
-        :placeholder="isFocused ? 'Search suppliers...' : 'Select a supplier'"
+        :placeholder="isFocused ? 'Search barcodes...' : 'Select a barcode'"
         @input="handleSearch"
         @focus="onInputFocus"
         @blur="onInputBlur"
@@ -203,19 +204,19 @@ const clearSelection = (e: Event) => {
       </button>
     </div>
 
-    <!-- Dropdown with suppliers list -->
+    <!-- Dropdown with barcodes list -->
     <div
       v-show="isDropdownOpen"
       class="absolute z-10 mt-1 w-full max-h-[300px] overflow-y-auto rounded-md
              border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800
              shadow-lg divide-y divide-zinc-100 dark:divide-zinc-700">
-      <!-- Suppliers list -->
+      <!-- Barcodes list -->
       <div
-        v-for="item in suppliers" :key="item.id"
+        v-for="item in barcodes" :key="item.id"
         @click="selectItem(item)"
         class="px-4 py-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700 transition duration-150 ease-in-out"
         :class="{ 'bg-blue-50 dark:bg-blue-900/30': model === item.id }">
-        <div class="text-zinc-900 dark:text-zinc-100">{{ item.name }} [{{ item.code }}]</div>
+        <div class="text-zinc-900 dark:text-zinc-100">{{ item.product_name }} [{{ item.barcode }}]</div>
       </div>
 
       <!-- Infinite loading component -->
@@ -229,14 +230,14 @@ const clearSelection = (e: Event) => {
 
         <!-- No more data message -->
         <template #complete>
-          <div class="py-3 text-center text-zinc-500 dark:text-zinc-400">No more suppliers</div>
+          <div class="py-3 text-center text-zinc-500 dark:text-zinc-400">No more barcodes</div>
         </template>
 
         <!-- Error message -->
         <template #error>
           <div class="py-6 text-center">
             <UIcon name="i-mdi-exclamation" class="size-8 text-red-500" />
-            <p class="mt-2 text-red-500">Error loading suppliers</p>
+            <p class="mt-2 text-red-500">Error loading barcodes</p>
           </div>
         </template>
       </InfiniteLoading>

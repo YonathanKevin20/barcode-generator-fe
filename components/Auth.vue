@@ -10,7 +10,8 @@ const { data, signOut } = useAuth()
         @click="signOut({ callbackUrl: '/login' })"
         label="Logout"
         variant="link"
-        color="neutral" />
+        color="neutral"
+        class="cursor-pointer" />
     </div>
     <UButton
       v-else

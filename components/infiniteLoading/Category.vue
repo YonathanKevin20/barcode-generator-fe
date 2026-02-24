@@ -71,12 +71,19 @@ const infiniteHandler = async ($state: any) => {
   }
 }
 
+const reloadState = () => {
+  categories.value = []
+  page.value = 1
+  noMore.value = false
+}
+
 // Reset search and pagination when opening the dropdown
 const onInputFocus = () => {
   isFocused.value = true
   isDropdownOpen.value = true
   dropdownManager.setActive(dropdownId)
   searchName.value = ''
+  reloadState()
 }
 
 // Handle input blur
@@ -96,9 +103,7 @@ const handleSearch = (event: Event) => {
   searchName.value = target.value
 
   // Reset and reload when search changes
-  categories.value = []
-  page.value = 1
-  noMore.value = false
+  reloadState()
 }
 
 // Handle item selection
@@ -118,6 +123,8 @@ const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
   if (isDropdownOpen.value) {
     isFocused.value = true
+    searchName.value = ''
+    reloadState()
   }
 }
 

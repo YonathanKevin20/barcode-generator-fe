@@ -12,7 +12,6 @@ definePageMeta({
 })
 
 const $fetchWithToken = fetchWithToken()
-const table = useTemplateRef('table')
 
 const { data: dataAuth } = useAuth()
 
@@ -115,7 +114,7 @@ const updateBarcodeInactive = async (id: number) => {
   })
 
   toast.add({ title: data.message })
-  table.value?.tableApi?.resetRowSelection()
+  rowSelection.value = {}
   refresh()
 }
 
@@ -138,7 +137,12 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 20
 })
+
 watch(() => pagination.value.pageSize, () => {
+  pagination.value.pageIndex = 0
+  refresh()
+})
+watch(() => pagination.value.pageIndex, () => {
   refresh()
 })
 
@@ -150,7 +154,8 @@ const search = reactive({
   barcode: '',
 })
 watch(search, () => {
-  table.value?.tableApi?.resetPagination()
+  pagination.value.pageIndex = 0
+  refresh()
 })
 watch(() => search.product_name, (val) => {
   if (val !== val.toUpperCase()) {
@@ -175,8 +180,7 @@ const { data, status, refresh } = await useLazyAsyncData('barcodes', () => $fetc
     page: 1,
     total: 0,
     total_page: 0
-  }),
-  watch: [pagination, search]
+  })
 })
 
 const dataItems = computed(() => data.value?.data || [])
@@ -240,17 +244,17 @@ const selectedIds = computed(() => {
         <span>{{ selectedIds.length }} of {{ totalItem }} items selected</span>
       </div>
       <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
+        :page="pagination.pageIndex + 1"
+        :items-per-page="pagination.pageSize"
         :total="totalItem"
-        @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+        @update:page="(p: number) => pagination.pageIndex = p - 1"
         class="flex items-center justify-end col-span-1" />
     </div>
 
     <UTable
-      ref="table"
       v-model:pagination="pagination"
       v-model:row-selection="rowSelection"
+      :pagination-options="{ manualPagination: true, rowCount: totalItem, autoResetPageIndex: false }"
       :loading="status === 'pending'"
       :columns="columns"
       :data="dataItems"

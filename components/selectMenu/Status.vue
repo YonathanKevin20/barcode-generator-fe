@@ -5,7 +5,7 @@ const props = defineProps<{
 
 const $fetchWithToken = fetchWithToken()
 
-const model = defineModel<number>()
+const model = defineModel<number | string>()
 
 const { data, status, refresh } = await useLazyAsyncData(
   `statuses-${props.showAll ? 'all' : 'filtered'}`,
@@ -17,6 +17,12 @@ const { data, status, refresh } = await useLazyAsyncData(
       : data.data
   }
 )
+
+onMounted(() => {
+  if (model.value === 0) {
+    model.value = ''
+  }
+})
 </script>
 
 <template>

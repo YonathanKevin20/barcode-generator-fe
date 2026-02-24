@@ -1,2 +1,19 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
+
+@media print {
+  nav, footer, .no-print {
+    display: none !important;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color-scheme: light !important;
+  }
+  .dark {
+    color-scheme: light !important;
+    background: white !important;
+    color: black !important;
+  }
+}

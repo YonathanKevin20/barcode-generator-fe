@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     }
   },
 
-  compatibilityDate: '2025-03-23',
+  compatibilityDate: '2026-02-23',
 
   css: ['~/assets/css/main.css'],
 

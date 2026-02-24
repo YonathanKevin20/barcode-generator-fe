@@ -23,12 +23,14 @@ const hidePassword = ref(true)
 const errorMessage = ref('')
 const pending = ref(false)
 
+const route = useRoute()
+const redirectUrl = computed(() => route.query.redirect as string || '/')
 const { signIn } = useAuth()
 const onSubmit = async (event: FormSubmitEvent<Login>) => {
   pending.value = true
 
   try {
-    await signIn(event.data, { callbackUrl: '/' })
+    await signIn(event.data, { callbackUrl: redirectUrl.value })
   } catch (error: any) {
     const message = error.data.error?.message || error.data.message
     errorMessage.value = message
