@@ -12,9 +12,9 @@ services:
       - .:/src
     command: bun run start
     healthcheck:
-      test: ["CMD", "wget", "-O", "/dev/null", "-q", "http://localhost:3000/"]
-      interval: 30s
-      timeout: 10s
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 3s
       retries: 3
 
 networks:

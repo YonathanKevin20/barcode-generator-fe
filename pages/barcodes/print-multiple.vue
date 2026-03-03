@@ -194,7 +194,7 @@ const doPrint = () => {
 }
 
 @page {
-  size: 90mm 46mm;
+  size: 46mm 90mm;
   margin: 0;
 }
 
@@ -208,20 +208,20 @@ const doPrint = () => {
     left: auto !important;
     display: block !important;
     background: white !important;
-    width: 90mm;
+    width: 46mm;
   }
 
   .label-grid {
     display: flex;
-    flex-wrap: wrap;
-    width: 90mm;
+    flex-direction: column;
+    width: 46mm;
     margin: 0;
     padding: 0;
   }
 
   .label-cell {
-    width: 30mm;
-    height: 46mm;
+    width: 46mm;
+    height: 30mm;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -234,11 +234,11 @@ const doPrint = () => {
 
   .label-product-name {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 6pt;
+    font-size: 7pt;
     font-weight: normal;
     text-align: center;
     line-height: 1.2;
-    max-height: 10mm;
+    max-height: 8mm;
     overflow: hidden;
     word-break: break-word;
     margin-bottom: 1mm;
@@ -246,14 +246,14 @@ const doPrint = () => {
   }
 
   .label-barcode {
-    max-width: 28mm;
+    max-width: 42mm;
     height: auto;
     display: block;
   }
 
   .label-price {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 7pt;
+    font-size: 8pt;
     font-weight: bold;
     text-align: center;
     margin-top: 1mm;
