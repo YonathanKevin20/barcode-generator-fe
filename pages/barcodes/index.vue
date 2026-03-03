@@ -76,6 +76,12 @@ const columns: TableColumn<Barcode>[] = [
   {
     accessorKey: 'created_by_user',
     header: 'CREATED BY',
+    meta: {
+      class: {
+        th: 'text-nowrap',
+        td: 'text-nowrap'
+      }
+    }
   }
 ]
 const actionItems = (row: Barcode): DropdownMenuItem[][] => {
