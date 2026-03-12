@@ -90,7 +90,7 @@ const doPrint = () => {
           format: 'EAN13',
           width: 1,
           height: 40,
-          fontSize: 10,
+          fontSize: 12,
           margin: 2,
           displayValue: true,
         })
@@ -194,7 +194,7 @@ const doPrint = () => {
 }
 
 @page {
-  size: 90mm 46mm;
+  size: 90mm 45mm;
   margin: 0;
 }
 
@@ -214,25 +214,23 @@ const doPrint = () => {
   }
 
   .label-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 30mm 30mm 30mm;
     width: 90mm;
-    margin: 0 auto !important;
+    margin: 0 !important;
     padding: 0;
   }
 
   .label-cell {
     width: 30mm;
-    height: 46mm;
+    height: 42mm;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    text-align: center;
     margin: 0;
-    padding: 0;
+    padding: 1mm;
     overflow: hidden;
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   .label-product-name {
@@ -241,28 +239,30 @@ const doPrint = () => {
     font-weight: normal;
     text-align: center;
     line-height: 1.2;
-    max-height: 10mm;
+    max-height: 8mm;
     overflow: hidden;
     word-break: break-word;
-    margin: 0;
+    margin: 0 0 1mm 0;
     padding: 0;
     color: #000;
+    width: 100%;
   }
 
   .label-barcode {
-    max-width: 28mm;
+    max-width: 100%;
+    width: 100%;
     height: auto;
     display: block;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
   }
 
   .label-price {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 7pt;
+    font-size: 10pt;
     font-weight: bold;
     text-align: center;
-    margin: 0;
+    margin: 1mm 0 0 0;
     padding: 0;
     color: #000;
   }

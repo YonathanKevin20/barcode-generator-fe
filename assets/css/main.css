@@ -5,7 +5,7 @@
   nav, footer, .no-print {
     display: none !important;
   }
-  *, *::before, *::after {
+  *:not(.print-area *), *:not(.print-area *)::before, *:not(.print-area *)::after {
     margin: 0 !important;
     padding: 0 !important;
   }
