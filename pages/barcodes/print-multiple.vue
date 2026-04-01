@@ -194,7 +194,7 @@ const doPrint = () => {
 }
 
 @page {
-  size: 90mm 45mm;
+  size: 90mm 43.5mm;
   margin: 0;
 }
 
@@ -216,6 +216,7 @@ const doPrint = () => {
   .label-grid {
     display: grid;
     grid-template-columns: 30mm 30mm 30mm;
+    grid-auto-rows: 43.5mm;
     width: 90mm;
     margin: 0 !important;
     padding: 0;
@@ -223,14 +224,16 @@ const doPrint = () => {
 
   .label-cell {
     width: 30mm;
-    height: 42mm;
+    height: 43.5mm;
     box-sizing: border-box;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin: 0;
     padding: 1mm;
     overflow: hidden;
-    break-inside: avoid;
   }
 
   .label-product-name {

@@ -5,16 +5,19 @@
   nav, footer, .no-print {
     display: none !important;
   }
-  *:not(.print-area *), *:not(.print-area *)::before, *:not(.print-area *)::after {
+
+  *:not(.print-area):not(.print-area *) {
     margin: 0 !important;
     padding: 0 !important;
   }
+
   html, body {
     background: white !important;
     color-scheme: light !important;
     width: auto !important;
     max-width: none !important;
   }
+
   .dark {
     color-scheme: light !important;
     background: white !important;
