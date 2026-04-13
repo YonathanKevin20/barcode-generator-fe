@@ -223,7 +223,7 @@ const doPrint = () => {
   }
 
   .label-cell {
-    width: 30mm;
+    width: 28mm;
     height: 43.5mm;
     box-sizing: border-box;
     display: flex;
@@ -232,7 +232,7 @@ const doPrint = () => {
     justify-content: center;
     text-align: center;
     margin: 0;
-    padding: 1mm;
+    padding: 0.5mm 2mm;
     overflow: hidden;
   }
 
